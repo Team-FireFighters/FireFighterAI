@@ -90,12 +90,12 @@ if uploaded_image is not None:
         
     raw_image = Image.open(uploaded_image)
     img_array = image.img_to_array(raw_image)
-    tempr=random.randint(50,101)
+    tempr=random.randint(50,101) #bruh
     fire = predict(img_array)
     if fire:
-        if tempr>70: 
+        if tempr>70: #bruh
             prediction = 'fire'           
         else:
-            prediction = 'fire and smoke'
+            prediction = 'fire and smoke' 
     else:
         prediction = 'no fire'
