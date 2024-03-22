@@ -9,7 +9,7 @@ def main():
     st.markdown(
         """
         Welcome to the Fire Detection App! This app helps in early detection of fires in prone regions 
-        by utilizing satellite imagery and live camera feeds. Follow the steps below to use the app effectively:
+        by utilizing  the satellite imagery and live camera feeds. Follow the steps below to use the app effectively:
         """
     )
 
