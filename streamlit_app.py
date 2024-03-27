@@ -17,7 +17,7 @@ def main():
         """
         ### Steps to Use the App:
         1. **Satellite Image Analysis:**
-           - Navigate to the 'Satellite Image' page from the sidebar .
+           - Navigate to  'Satellite Image' page from the sidebar .
            - Upload a satellite image of a fire-prone region.
            - The app will process the image and detect if there are any fires present.
 
