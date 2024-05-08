@@ -9,14 +9,14 @@ import glob
 import re
 import numpy as np
 import random
-
+import ultralytics
 # Keras
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from keras.models import load_model
 from keras.preprocessing import image
 
 # Flask utils
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, send_file
 from werkzeug.utils import secure_filename
 from gevent.pywsgi import WSGIServer
 import model
@@ -55,6 +55,15 @@ def model_predict(img_path, model):
     preds = model.predict(x)
     return preds
 """
+def get_latest_predict_folder(root_dir):
+    predict_folders = [d for d in os.listdir(root_dir) if d.startswith('predict')]
+    if not predict_folders:
+        return None
+    
+    # Sort the folders based on creation time
+    sorted_folders = sorted(predict_folders, key=lambda x: os.path.getctime(os.path.join(root_dir, x)), reverse=True)
+    latest_predict_folder = sorted_folders[0]
+    return os.path.join(root_dir, latest_predict_folder)
 
 @app.route('/', methods=['GET'])
 def index():
@@ -99,6 +108,21 @@ def upload():
     return None
 
 
+@app.route('/video', methods=['GET', 'POST'])
+def upload_video():
+    if request.method == 'POST':
+        # Get the file from post request
+        f = request.files['file']
+        HOME = "/Users/rishit/Documents/VIT/SEM5_point_5/EPICS"
+        ultralytics.checks()
+        basepath = os.path.dirname(__file__)
+        file_path = os.path.join(
+            basepath, 'uploads', secure_filename(f.filename))
+        f.save(file_path)
+        os.system(f'cd {HOME}')
+        os.system(f'yolo task=detect mode=predict model=/Users/rishit/Documents/VIT/SEM5_point_5/EPICS/best.pt conf=0.25 source={file_path} save=True')
+        latest = get_latest_predict_folder('/Users/rishit/Documents/VIT/SEM5_point_5/EPICS/runs/detect')
+        return send_file(os.path.join(latest,secure_filename(f.filename)), as_attachment=True)
 if __name__ == '__main__':
     # app.run(port=5002, debug=True)
 
